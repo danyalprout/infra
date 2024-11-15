@@ -708,7 +708,7 @@ func (s *Server) rateLimitSender(ctx context.Context, req *RPCReq) error {
 	// otherwise reject before rate limiting to avoid replay attacks.
 	if !s.isAllowedChainId(tx.ChainId()) {
 		log.Debug("chain id is not allowed", "req_id", GetReqID(ctx))
-		return txpool.ErrInvalidSender
+		return ErrInvalidParams(txpool.ErrInvalidSender.Error())
 	}
 
 	// Convert the transaction into a Message object so that we can get the
