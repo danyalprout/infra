@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -476,6 +477,10 @@ func RecordRPCError(ctx context.Context, backendName, method string, err error) 
 	}
 
 	rpcErrorsTotal.WithLabelValues(GetAuthCtx(ctx), backendName, method, strconv.Itoa(code)).Inc()
+
+	if code == -1 {
+		log.Warn("unknown rpc error", "err", err, "backend", backendName, "method", method)
+	}
 }
 
 func RecordWSMessage(ctx context.Context, backendName, source string) {
